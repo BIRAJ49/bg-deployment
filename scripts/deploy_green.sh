@@ -13,7 +13,7 @@ docker pull "${IMAGE_REPO}:${GREEN_TAG}" || true
 echo " starting/refreshing app-green"
 IMAGE_REPO="$IMAGE_REPO" GREEN_TAG="$GREEN_TAG" docker compose up -d app-green
 
-echo "⏳ waiting for green health..."
+echo " waiting for green health..."
 for i in {1..30}; do
   status=$(docker inspect -f '{{.State.Health.Status}}' app-green 2>/dev/null || echo "missing")
   echo "  green: $status"
@@ -27,4 +27,4 @@ done
 # optional: stop old blue to free resources
 sleep 8
 docker rm -f app-blue || true
-echo "🎉 green live"
+echo "green live"
