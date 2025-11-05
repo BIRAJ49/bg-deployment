@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Required env:
-#   IMAGE_REPO (e.g., docker.io/BIRAJ49/bg-deplyment)
+#   IMAGE_REPO (e.g., docker.io/biraj17/bg-deployment)
 #   GREEN_TAG  (new image tag)
 : "${IMAGE_REPO:?set IMAGE_REPO}"
 : "${GREEN_TAG:?set GREEN_TAG}"

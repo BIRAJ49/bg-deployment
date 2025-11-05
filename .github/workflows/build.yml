@@ -21,7 +21,7 @@ jobs:
 
       - name: Build & push (tag = short SHA)
         run: |
-          IMAGE="docker.io/BIRAJ49/bg-deplyment"
+          IMAGE="docker.io/biraj17/bg-deployment"
           TAG="${GITHUB_SHA::7}"
           docker build -t $IMAGE:$TAG -t $IMAGE:latest .
           docker push $IMAGE:$TAG
