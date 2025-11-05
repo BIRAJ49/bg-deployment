@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+  app-blue:
+    image: ${IMAGE_REPO:?err}:${BLUE_TAG:-v1}
+    container_name: app-blue
+    environment:
+      PORT: 3000
+      VERSION: ${BLUE_VERSION:-blue}
+      DEPLOYMENT_LABEL: ${BLUE_LABEL:-Blue}
+      DATABASE_URL: ${DATABASE_URL:-}
+      DATABASE_SSL: ${DATABASE_SSL:-true}
+      DATABASE_SSL_REJECT_UNAUTHORIZED: ${DATABASE_SSL_REJECT_UNAUTHORIZED:-true}
+    expose: ["3000"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:3000/health || exit 1"]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - app-net
+
+  app-green:
+    image: ${IMAGE_REPO:?err}:${GREEN_TAG:-v2}
+    container_name: app-green
+    environment:
+      PORT: 3000
+      VERSION: ${GREEN_VERSION:-green}
+      DEPLOYMENT_LABEL: ${GREEN_LABEL:-Green}
+      DATABASE_URL: ${DATABASE_URL:-}
+      DATABASE_SSL: ${DATABASE_SSL:-true}
+      DATABASE_SSL_REJECT_UNAUTHORIZED: ${DATABASE_SSL_REJECT_UNAUTHORIZED:-true}
+    expose: ["3000"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:3000/health || exit 1"]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - app-net
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: bg-nginx
+    depends_on:
+      - app-blue
+      - app-green
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-site.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx:/srv/app/nginx
+    restart: unless-stopped
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    external: true

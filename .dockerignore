@@ -1,0 +1,14 @@
+app/node_modules
+app/npm-debug.log
+app/.env
+.git
+.gitignore
+README.md
+compose.yml
+nginx-site.conf
+nginx/
+scripts/
+.github/
+
+
+.DS_Store
