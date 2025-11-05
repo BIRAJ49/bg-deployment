@@ -158,6 +158,16 @@ docker run --rm -p 3000:3000 \
 - `.github/workflows/build.yml` checks out the repo, runs `npm ci && npm run lint`, and builds the Docker image on every push / PR.
 - `.github/workflows/deploy-ec2.yml` is a manual dispatch workflow that SSHes to your EC2 host, rebuilds the requested color (`blue` or `green`), and runs the corresponding switch script. Provide `EC2_SSH_KEY`, `EC2_USER`, `EC2_HOST`, and optional `EC2_DEPLOY_PATH` secrets.
 
+## Deployment Verification
+
+- Latest rollout served by green container: `/version`
+- Load balancer health check responds `200 OK`: `/healthz`
+- Containers running on EC2 host: `docker ps`
+
+![Containers running](docs/docker-ps-green.png)
+![Health check ok](docs/healthz-ok.png)
+![Version endpoint](docs/version-green.png)
+
 ## Logging
 
 - `morgan` streams HTTP access logs into the `pino` logger.
